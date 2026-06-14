@@ -126,12 +126,12 @@ namespace Story.Editor.WinForms
 
             if (tag is string s)
             {
-                if (s == "story")   ShowStoryMeta();
+                if (s == "story") ShowStoryMeta();
                 if (s == "addprop") { AddProperty(); return; }
-                if (s == "addblock"){ AddBlock();    return; }
+                if (s == "addblock") { AddBlock(); return; }
             }
             else if (tag is StatePropertyDefinition prop) ShowPropertyEditor(prop);
-            else if (tag is StoryBlock block)             ShowBlockEditor(block);
+            else if (tag is StoryBlock block) ShowBlockEditor(block);
         }
 
         private void ClearEditPanel()
@@ -180,30 +180,30 @@ namespace Story.Editor.WinForms
             var pnl = MakeScrollPanel();
             AddHeader(pnl, "Property: " + prop.Key);
 
-            var (_, tbKey)      = AddLabeledField(pnl, "Key:",          prop.Key,              300);
-            var (_, tbLabel)    = AddLabeledField(pnl, "HUD Label:",    prop.HudLabel,          200);
-            var (_, tbMin)      = AddLabeledField(pnl, "Min:",          prop.Min.ToString(),     80);
-            var (_, tbMax)      = AddLabeledField(pnl, "Max:",          prop.Max.ToString(),     80);
-            var (_, tbInitial)  = AddLabeledField(pnl, "Initial:",      prop.Initial.ToString(), 80);
-            var (_, tbHudType)  = AddLabeledField(pnl, "HUD Type (health / stamina / level / blank):", prop.HudType ?? "", 120);
-            var cbVisible       = AddCheckField(pnl, "Visible in HUD", prop.VisibleInHud);
-            var (_, tbOrder)    = AddLabeledField(pnl, "HUD Order:",    prop.HudOrder.ToString(), 60);
-            var (_, tbOnMin)    = AddLabeledField(pnl, "On Min → Block:", prop.OnMinBlock ?? "", 200);
-            var (_, tbOnMax)    = AddLabeledField(pnl, "On Max → Block:", prop.OnMaxBlock ?? "", 200);
+            var (_, tbKey) = AddLabeledField(pnl, "Key:", prop.Key, 300);
+            var (_, tbLabel) = AddLabeledField(pnl, "HUD Label:", prop.HudLabel, 200);
+            var (_, tbMin) = AddLabeledField(pnl, "Min:", prop.Min.ToString(), 80);
+            var (_, tbMax) = AddLabeledField(pnl, "Max:", prop.Max.ToString(), 80);
+            var (_, tbInitial) = AddLabeledField(pnl, "Initial:", prop.Initial.ToString(), 80);
+            var (_, tbHudType) = AddLabeledField(pnl, "HUD Type (health / stamina / level / blank):", prop.HudType ?? "", 120);
+            var cbVisible = AddCheckField(pnl, "Visible in HUD", prop.VisibleInHud);
+            var (_, tbOrder) = AddLabeledField(pnl, "HUD Order:", prop.HudOrder.ToString(), 60);
+            var (_, tbOnMin) = AddLabeledField(pnl, "On Min → Block:", prop.OnMinBlock ?? "", 200);
+            var (_, tbOnMax) = AddLabeledField(pnl, "On Max → Block:", prop.OnMaxBlock ?? "", 200);
 
             AddSpacer(pnl);
 
             var btnApply = MakeButton("💾 Apply");
             btnApply.Click += (s, e) =>
             {
-                prop.Key        = tbKey.Text;
-                prop.HudLabel   = tbLabel.Text;
-                prop.Min        = TryDouble(tbMin.Text, prop.Min);
-                prop.Max        = TryDouble(tbMax.Text, prop.Max);
-                prop.Initial    = TryDouble(tbInitial.Text, prop.Initial);
-                prop.HudType    = string.IsNullOrWhiteSpace(tbHudType.Text) ? null : tbHudType.Text.Trim();
+                prop.Key = tbKey.Text;
+                prop.HudLabel = tbLabel.Text;
+                prop.Min = TryDouble(tbMin.Text, prop.Min);
+                prop.Max = TryDouble(tbMax.Text, prop.Max);
+                prop.Initial = TryDouble(tbInitial.Text, prop.Initial);
+                prop.HudType = string.IsNullOrWhiteSpace(tbHudType.Text) ? null : tbHudType.Text.Trim();
                 prop.VisibleInHud = cbVisible.Checked;
-                prop.HudOrder   = TryInt(tbOrder.Text, prop.HudOrder);
+                prop.HudOrder = TryInt(tbOrder.Text, prop.HudOrder);
                 prop.OnMinBlock = NullIfEmpty(tbOnMin.Text);
                 prop.OnMaxBlock = NullIfEmpty(tbOnMax.Text);
                 _isDirty = true;
@@ -251,7 +251,8 @@ namespace Story.Editor.WinForms
             var rtbText = new RichTextBox
             {
                 Text = block.Text,
-                Width = 540, Height = 110,
+                Width = 540,
+                Height = 110,
                 BackColor = Color.FromArgb(32, 26, 46),
                 ForeColor = Color.FromArgb(230, 220, 245),
                 Font = new Font("Georgia", 11f),
@@ -299,8 +300,8 @@ namespace Story.Editor.WinForms
             var btnApply = MakeButton("💾 Apply Block");
             btnApply.Click += (s, e) =>
             {
-                block.Id     = tbId.Text;
-                block.Text   = rtbText.Text;
+                block.Id = tbId.Text;
+                block.Text = rtbText.Text;
                 block.IsFinal = cbFinal.Checked;
                 _isDirty = true;
                 RefreshTree();
@@ -346,15 +347,19 @@ namespace Story.Editor.WinForms
         {
             var grid = new DataGridView
             {
-                Width = 560, Height = 160,
+                Width = 560,
+                Height = 160,
                 BackgroundColor = Color.FromArgb(26, 20, 38),
                 GridColor = Color.FromArgb(55, 45, 75),
                 ForeColor = Color.FromArgb(220, 210, 240),
                 ColumnHeadersDefaultCellStyle = new DataGridViewCellStyle
-                    { BackColor = Color.FromArgb(38, 30, 54), ForeColor = Color.FromArgb(220, 210, 240) },
+                { BackColor = Color.FromArgb(38, 30, 54), ForeColor = Color.FromArgb(220, 210, 240) },
                 DefaultCellStyle = new DataGridViewCellStyle
-                    { BackColor = Color.FromArgb(26, 20, 38), ForeColor = Color.FromArgb(220, 210, 240),
-                      SelectionBackColor = Color.FromArgb(65, 50, 90) },
+                {
+                    BackColor = Color.FromArgb(26, 20, 38),
+                    ForeColor = Color.FromArgb(220, 210, 240),
+                    SelectionBackColor = Color.FromArgb(65, 50, 90)
+                },
                 AutoGenerateColumns = false,
                 SelectionMode = DataGridViewSelectionMode.FullRowSelect,
                 ReadOnly = true,
@@ -363,10 +368,10 @@ namespace Story.Editor.WinForms
                 Margin = new Padding(0, 4, 0, 8)
             };
 
-            grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Text",         Width = 210 });
+            grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Text", Width = 210 });
             grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Target Block", Width = 150 });
-            grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Condition",    Width = 75  });
-            grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Effects",      Width = 75  });
+            grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Condition", Width = 75 });
+            grid.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Effects", Width = 75 });
 
             foreach (var dec in block.Decisions)
             {
@@ -410,9 +415,12 @@ namespace Story.Editor.WinForms
 
             var flow = new FlowLayoutPanel
             {
-                Dock = DockStyle.Fill, FlowDirection = FlowDirection.TopDown,
-                AutoScroll = true, Padding = new Padding(16),
-                BackColor = Color.FromArgb(22, 18, 32), WrapContents = false
+                Dock = DockStyle.Fill,
+                FlowDirection = FlowDirection.TopDown,
+                AutoScroll = true,
+                Padding = new Padding(16),
+                BackColor = Color.FromArgb(22, 18, 32),
+                WrapContents = false
             };
 
             // Decision text
@@ -448,17 +456,19 @@ namespace Story.Editor.WinForms
             var propKeys = _story.Properties.Select(p => p.Key).ToArray();
             var effectsGrid = new DataGridView
             {
-                Width = 620, Height = 120,
+                Width = 620,
+                Height = 120,
                 BackgroundColor = Color.FromArgb(20, 16, 30),
                 DefaultCellStyle = new DataGridViewCellStyle { BackColor = Color.FromArgb(26, 20, 38), ForeColor = Color.FromArgb(220, 210, 240) },
                 ColumnHeadersDefaultCellStyle = new DataGridViewCellStyle { BackColor = Color.FromArgb(38, 30, 54), ForeColor = Color.FromArgb(220, 210, 240) },
-                AllowUserToAddRows = true, BorderStyle = BorderStyle.None,
+                AllowUserToAddRows = true,
+                BorderStyle = BorderStyle.None,
                 AutoGenerateColumns = false,
                 Margin = new Padding(0, 0, 0, 6)
             };
             var colProp = new DataGridViewComboBoxColumn { HeaderText = "Property", Width = 240, DataSource = propKeys.ToList() };
             var colType = new DataGridViewComboBoxColumn { HeaderText = "Type", Width = 80, DataSource = new List<string> { "ADD", "SET" } };
-            var colVal  = new DataGridViewTextBoxColumn  { HeaderText = "Value", Width = 100 };
+            var colVal = new DataGridViewTextBoxColumn { HeaderText = "Value", Width = 100 };
             effectsGrid.Columns.AddRange(colProp, colType, colVal);
             foreach (var ef in dec.Effects)
             {
@@ -474,15 +484,19 @@ namespace Story.Editor.WinForms
             flow.Controls.Add(new Label
             {
                 Text = "Example: {\"type\":\"COMPARISON\",\"property\":\"inventory.money\",\"operator\":\">=\",\"value\":5}",
-                ForeColor = Color.FromArgb(110, 100, 150), AutoSize = true,
-                Font = new Font("Consolas", 7.5f), Margin = new Padding(0, 0, 0, 2)
+                ForeColor = Color.FromArgb(110, 100, 150),
+                AutoSize = true,
+                Font = new Font("Consolas", 7.5f),
+                Margin = new Padding(0, 0, 0, 2)
             });
             string condJson = dec.Condition == null ? "" :
                 System.Text.Json.JsonSerializer.Serialize(dec.Condition,
                     new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
             var rtbCond = new RichTextBox
             {
-                Text = condJson, Width = 620, Height = 100,
+                Text = condJson,
+                Width = 620,
+                Height = 100,
                 BackColor = Color.FromArgb(16, 12, 24),
                 ForeColor = Color.FromArgb(160, 255, 140),
                 Font = new Font("Consolas", 9f),
@@ -494,15 +508,18 @@ namespace Story.Editor.WinForms
             // Save button
             var btnSave = new Button
             {
-                Text = "💾 Save Decision", Width = 180, Height = 36,
+                Text = "💾 Save Decision",
+                Width = 180,
+                Height = 36,
                 BackColor = Color.FromArgb(35, 80, 35),
                 ForeColor = Color.FromArgb(230, 220, 245),
-                FlatStyle = FlatStyle.Flat, DialogResult = DialogResult.OK
+                FlatStyle = FlatStyle.Flat,
+                DialogResult = DialogResult.OK
             };
             btnSave.FlatAppearance.BorderColor = Color.FromArgb(80, 200, 80);
             btnSave.Click += (s, e) =>
             {
-                dec.Text        = tbText.Text;
+                dec.Text = tbText.Text;
                 dec.TargetBlock = tbTarget.Text;
 
                 dec.Effects.Clear();
@@ -515,8 +532,8 @@ namespace Story.Editor.WinForms
                     dec.Effects.Add(new EffectDefinition
                     {
                         Property = prop,
-                        Type     = type ?? "ADD",
-                        Value    = TryDouble(row.Cells[2].Value?.ToString() ?? "0", 0)
+                        Type = type ?? "ADD",
+                        Value = TryDouble(row.Cells[2].Value?.ToString() ?? "0", 0)
                     });
                 }
 
@@ -540,8 +557,10 @@ namespace Story.Editor.WinForms
 
         private FlowLayoutPanel MakeScrollPanel() => new FlowLayoutPanel
         {
-            Dock = DockStyle.Fill, FlowDirection = FlowDirection.TopDown,
-            AutoScroll = true, WrapContents = false,
+            Dock = DockStyle.Fill,
+            FlowDirection = FlowDirection.TopDown,
+            AutoScroll = true,
+            WrapContents = false,
             BackColor = Color.FromArgb(22, 18, 32),
             Padding = new Padding(18, 14, 18, 18)
         };
@@ -559,7 +578,8 @@ namespace Story.Editor.WinForms
         private void AddSmallLabel(FlowLayoutPanel pnl, string text) =>
             pnl.Controls.Add(new Label
             {
-                Text = text, AutoSize = true,
+                Text = text,
+                AutoSize = true,
                 ForeColor = Color.FromArgb(170, 160, 200),
                 Margin = new Padding(0, 6, 0, 2)
             });
@@ -579,7 +599,7 @@ namespace Story.Editor.WinForms
         private (Label lbl, TextBox tb) AddLabeledField(FlowLayoutPanel pnl, string label, string value, int width)
         {
             var lbl = new Label { Text = label, AutoSize = true, ForeColor = Color.FromArgb(170, 160, 200), Margin = new Padding(0, 6, 0, 1) };
-            var tb  = new TextBox { Text = value, Width = width, BackColor = Color.FromArgb(32, 26, 46), ForeColor = Color.FromArgb(230, 220, 245), BorderStyle = BorderStyle.FixedSingle };
+            var tb = new TextBox { Text = value, Width = width, BackColor = Color.FromArgb(32, 26, 46), ForeColor = Color.FromArgb(230, 220, 245), BorderStyle = BorderStyle.FixedSingle };
             pnl.Controls.Add(lbl);
             pnl.Controls.Add(tb);
             return (lbl, tb);
@@ -596,7 +616,9 @@ namespace Story.Editor.WinForms
         {
             var btn = new Button
             {
-                Text = text, Width = 180, Height = 34,
+                Text = text,
+                Width = 180,
+                Height = 34,
                 BackColor = bg ?? Color.FromArgb(48, 38, 65),
                 ForeColor = Color.FromArgb(230, 220, 245),
                 FlatStyle = FlatStyle.Flat,
@@ -626,5 +648,10 @@ namespace Story.Editor.WinForms
 
         private static string? NullIfEmpty(string s) =>
             string.IsNullOrWhiteSpace(s) ? null : s.Trim();
+
+        private void menuItemTools_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

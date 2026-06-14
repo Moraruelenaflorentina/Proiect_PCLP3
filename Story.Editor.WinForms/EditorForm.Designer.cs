@@ -4,7 +4,7 @@ namespace Story.Editor.WinForms
     {
         private System.ComponentModel.IContainer components = null;
 
-        // ── Menu ──────────────────────────────────────────────────────────────
+        //Menu 
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem menuItemFile;
         private System.Windows.Forms.ToolStripMenuItem menuNew;
@@ -16,18 +16,18 @@ namespace Story.Editor.WinForms
         private System.Windows.Forms.ToolStripMenuItem menuItemTools;
         private System.Windows.Forms.ToolStripMenuItem menuValidate;
 
-        // ── Layout ────────────────────────────────────────────────────────────
-        private System.Windows.Forms.SplitContainer splitMain;       // left | right
-        private System.Windows.Forms.SplitContainer splitRight;      // edit (top) | preview+log (bottom)
-        private System.Windows.Forms.SplitContainer splitBottom;     // preview | log
+        //Layout 
+        private System.Windows.Forms.SplitContainer splitMain;       
+        private System.Windows.Forms.SplitContainer splitRight;      
+        private System.Windows.Forms.SplitContainer splitBottom;     
 
-        // ── Left pane ─────────────────────────────────────────────────────────
+        //Left pane 
         private System.Windows.Forms.TreeView treeStory;
 
-        // ── Center pane (edit area) ───────────────────────────────────────────
+        //Center pane (edit area) 
         private System.Windows.Forms.Panel panelEdit;
 
-        // ── Right-bottom: preview + log ───────────────────────────────────────
+        //preview + log
         private System.Windows.Forms.PictureBox picPreview;
         private System.Windows.Forms.RichTextBox rtbLog;
 
@@ -39,108 +39,245 @@ namespace Story.Editor.WinForms
 
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-
-            // ── Form ─────────────────────────────────────────────────────────
-            this.Text = "Story Engine – Editor";
-            this.Size = new System.Drawing.Size(1200, 840);
-            this.MinimumSize = new System.Drawing.Size(900, 600);
-            this.BackColor = System.Drawing.Color.FromArgb(20, 16, 28);
-            this.ForeColor = System.Drawing.Color.FromArgb(230, 220, 245);
-            this.Font = new System.Drawing.Font("Segoe UI", 9.5f);
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-
-            // ── MenuStrip ────────────────────────────────────────────────────
-            this.menuStrip     = new System.Windows.Forms.MenuStrip();
-            this.menuItemFile  = new System.Windows.Forms.ToolStripMenuItem("📂 File");
-            this.menuNew       = new System.Windows.Forms.ToolStripMenuItem("New Story");
-            this.menuOpen      = new System.Windows.Forms.ToolStripMenuItem("Open Story...");
-            this.menuSep1      = new System.Windows.Forms.ToolStripSeparator();
-            this.menuSave      = new System.Windows.Forms.ToolStripMenuItem("Save Story...");
-            this.menuSep2      = new System.Windows.Forms.ToolStripSeparator();
-            this.menuExit      = new System.Windows.Forms.ToolStripMenuItem("Exit");
-            this.menuItemTools = new System.Windows.Forms.ToolStripMenuItem("🔧 Tools");
-            this.menuValidate  = new System.Windows.Forms.ToolStripMenuItem("Validate Story");
-
-            this.menuNew.Click      += new System.EventHandler(this.menuNew_Click);
-            this.menuOpen.Click     += new System.EventHandler(this.menuOpen_Click);
-            this.menuSave.Click     += new System.EventHandler(this.menuSave_Click);
-            this.menuExit.Click     += new System.EventHandler(this.menuExit_Click);
-            this.menuValidate.Click += new System.EventHandler(this.menuValidate_Click);
-
-            this.menuItemFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                this.menuNew, this.menuOpen, this.menuSep1,
-                this.menuSave, this.menuSep2, this.menuExit
-            });
-            this.menuItemTools.DropDownItems.Add(this.menuValidate);
-            this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                this.menuItemFile, this.menuItemTools
-            });
-            this.menuStrip.BackColor = System.Drawing.Color.FromArgb(22, 18, 32);
-            this.menuStrip.ForeColor = System.Drawing.Color.FromArgb(230, 220, 245);
-
-            // ── TreeView (left pane) ──────────────────────────────────────────
-            this.treeStory = new System.Windows.Forms.TreeView();
-            this.treeStory.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeStory.BackColor = System.Drawing.Color.FromArgb(26, 21, 38);
-            this.treeStory.ForeColor = System.Drawing.Color.FromArgb(220, 210, 240);
-            this.treeStory.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.treeStory.Font = new System.Drawing.Font("Segoe UI", 10f);
-            this.treeStory.ItemHeight = 26;
-            this.treeStory.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeStory_AfterSelect);
-
-            // ── Edit panel (center) ───────────────────────────────────────────
-            this.panelEdit = new System.Windows.Forms.Panel();
-            this.panelEdit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelEdit.BackColor = System.Drawing.Color.FromArgb(20, 16, 28);
-            this.panelEdit.AutoScroll = true;
-
-            // ── Preview image ─────────────────────────────────────────────────
-            this.picPreview = new System.Windows.Forms.PictureBox();
-            this.picPreview.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.picPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picPreview.BackColor = System.Drawing.Color.FromArgb(26, 21, 38);
-
-            // ── Validation log ────────────────────────────────────────────────
-            this.rtbLog = new System.Windows.Forms.RichTextBox();
-            this.rtbLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbLog.BackColor = System.Drawing.Color.FromArgb(14, 10, 20);
-            this.rtbLog.ForeColor = System.Drawing.Color.FromArgb(140, 255, 120);
-            this.rtbLog.Font = new System.Drawing.Font("Consolas", 9f);
-            this.rtbLog.ReadOnly = true;
-            this.rtbLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.rtbLog.Text = "Ready.";
-
-            // ── SplitContainer: bottom-left (preview) | bottom-right (log) ───
-            this.splitBottom = new System.Windows.Forms.SplitContainer();
-            this.splitBottom.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitBottom.SplitterDistance = 220;
-            this.splitBottom.BackColor = System.Drawing.Color.FromArgb(20, 16, 28);
-            this.splitBottom.Panel1.Controls.Add(this.picPreview);
-            this.splitBottom.Panel2.Controls.Add(this.rtbLog);
-
-            // ── SplitContainer: edit (top) | bottom strip ─────────────────────
-            this.splitRight = new System.Windows.Forms.SplitContainer();
-            this.splitRight.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitRight.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.splitRight.SplitterDistance = 520;
-            this.splitRight.BackColor = System.Drawing.Color.FromArgb(20, 16, 28);
-            this.splitRight.Panel1.Controls.Add(this.panelEdit);
-            this.splitRight.Panel2.Controls.Add(this.splitBottom);
-
-            // ── SplitContainer: tree (left) | edit+preview (right) ───────────
-            this.splitMain = new System.Windows.Forms.SplitContainer();
-            this.splitMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitMain.SplitterDistance = 240;
-            this.splitMain.BackColor = System.Drawing.Color.FromArgb(20, 16, 28);
-            this.splitMain.Panel1.Controls.Add(this.treeStory);
-            this.splitMain.Panel1.BackColor = System.Drawing.Color.FromArgb(26, 21, 38);
-            this.splitMain.Panel2.Controls.Add(this.splitRight);
-
-            // ── Add to Form ──────────────────────────────────────────────────
-            this.MainMenuStrip = this.menuStrip;
-            this.Controls.Add(this.splitMain);
-            this.Controls.Add(this.menuStrip);
+            menuStrip = new MenuStrip();
+            menuItemFile = new ToolStripMenuItem();
+            menuNew = new ToolStripMenuItem();
+            menuOpen = new ToolStripMenuItem();
+            menuSep1 = new ToolStripSeparator();
+            menuSave = new ToolStripMenuItem();
+            menuSep2 = new ToolStripSeparator();
+            menuExit = new ToolStripMenuItem();
+            menuItemTools = new ToolStripMenuItem();
+            menuValidate = new ToolStripMenuItem();
+            treeStory = new TreeView();
+            panelEdit = new Panel();
+            picPreview = new PictureBox();
+            rtbLog = new RichTextBox();
+            splitBottom = new SplitContainer();
+            splitRight = new SplitContainer();
+            splitMain = new SplitContainer();
+            menuStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)picPreview).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)splitBottom).BeginInit();
+            splitBottom.Panel1.SuspendLayout();
+            splitBottom.Panel2.SuspendLayout();
+            splitBottom.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitRight).BeginInit();
+            splitRight.Panel1.SuspendLayout();
+            splitRight.Panel2.SuspendLayout();
+            splitRight.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitMain).BeginInit();
+            splitMain.Panel1.SuspendLayout();
+            splitMain.Panel2.SuspendLayout();
+            splitMain.SuspendLayout();
+            SuspendLayout();
+            // 
+            // menuStrip
+            // 
+            menuStrip.BackColor = Color.FromArgb(22, 18, 32);
+            menuStrip.ForeColor = Color.FromArgb(230, 220, 245);
+            menuStrip.ImageScalingSize = new Size(20, 20);
+            menuStrip.Items.AddRange(new ToolStripItem[] { menuItemFile, menuItemTools });
+            menuStrip.Location = new Point(0, 0);
+            menuStrip.Name = "menuStrip";
+            menuStrip.Size = new Size(1182, 28);
+            menuStrip.TabIndex = 1;
+            // 
+            // menuItemFile
+            // 
+            menuItemFile.DropDownItems.AddRange(new ToolStripItem[] { menuNew, menuOpen, menuSep1, menuSave, menuSep2, menuExit });
+            menuItemFile.Name = "menuItemFile";
+            menuItemFile.Size = new Size(71, 24);
+            menuItemFile.Text = "📂 File";
+            // 
+            // menuNew
+            // 
+            menuNew.Name = "menuNew";
+            menuNew.Size = new Size(224, 26);
+            menuNew.Text = "New Story";
+            menuNew.Click += menuNew_Click;
+            // 
+            // menuOpen
+            // 
+            menuOpen.Name = "menuOpen";
+            menuOpen.Size = new Size(224, 26);
+            menuOpen.Text = "Open Story...";
+            menuOpen.Click += menuOpen_Click;
+            // 
+            // menuSep1
+            // 
+            menuSep1.Name = "menuSep1";
+            menuSep1.Size = new Size(221, 6);
+            // 
+            // menuSave
+            // 
+            menuSave.Name = "menuSave";
+            menuSave.Size = new Size(224, 26);
+            menuSave.Text = "Save Story...";
+            menuSave.Click += menuSave_Click;
+            // 
+            // menuSep2
+            // 
+            menuSep2.Name = "menuSep2";
+            menuSep2.Size = new Size(221, 6);
+            // 
+            // menuExit
+            // 
+            menuExit.Name = "menuExit";
+            menuExit.Size = new Size(224, 26);
+            menuExit.Text = "Exit";
+            menuExit.Click += menuExit_Click;
+            // 
+            // menuItemTools
+            // 
+            menuItemTools.DropDownItems.AddRange(new ToolStripItem[] { menuValidate });
+            menuItemTools.Name = "menuItemTools";
+            menuItemTools.Size = new Size(83, 24);
+            menuItemTools.Text = "🔧 Tools";
+            menuItemTools.Click += menuItemTools_Click;
+            // 
+            // menuValidate
+            // 
+            menuValidate.Name = "menuValidate";
+            menuValidate.Size = new Size(224, 26);
+            menuValidate.Text = "Validate Story";
+            menuValidate.Click += menuValidate_Click;
+            // 
+            // treeStory
+            // 
+            treeStory.BackColor = Color.FromArgb(26, 21, 38);
+            treeStory.BorderStyle = BorderStyle.None;
+            treeStory.Dock = DockStyle.Fill;
+            treeStory.Font = new Font("Segoe UI", 10F);
+            treeStory.ForeColor = Color.FromArgb(220, 210, 240);
+            treeStory.ItemHeight = 26;
+            treeStory.Location = new Point(0, 0);
+            treeStory.Name = "treeStory";
+            treeStory.Size = new Size(953, 765);
+            treeStory.TabIndex = 0;
+            treeStory.AfterSelect += treeStory_AfterSelect;
+            // 
+            // panelEdit
+            // 
+            panelEdit.AutoScroll = true;
+            panelEdit.BackColor = Color.FromArgb(20, 16, 28);
+            panelEdit.Dock = DockStyle.Fill;
+            panelEdit.Location = new Point(0, 0);
+            panelEdit.Name = "panelEdit";
+            panelEdit.Size = new Size(225, 543);
+            panelEdit.TabIndex = 0;
+            // 
+            // picPreview
+            // 
+            picPreview.BackColor = Color.FromArgb(26, 21, 38);
+            picPreview.Dock = DockStyle.Fill;
+            picPreview.Location = new Point(0, 0);
+            picPreview.Name = "picPreview";
+            picPreview.Size = new Size(181, 218);
+            picPreview.SizeMode = PictureBoxSizeMode.Zoom;
+            picPreview.TabIndex = 0;
+            picPreview.TabStop = false;
+            // 
+            // rtbLog
+            // 
+            rtbLog.BackColor = Color.FromArgb(14, 10, 20);
+            rtbLog.BorderStyle = BorderStyle.None;
+            rtbLog.Dock = DockStyle.Fill;
+            rtbLog.Font = new Font("Consolas", 9F);
+            rtbLog.ForeColor = Color.FromArgb(140, 255, 120);
+            rtbLog.Location = new Point(0, 0);
+            rtbLog.Name = "rtbLog";
+            rtbLog.ReadOnly = true;
+            rtbLog.Size = new Size(40, 218);
+            rtbLog.TabIndex = 0;
+            rtbLog.Text = "Ready.";
+            // 
+            // splitBottom
+            // 
+            splitBottom.BackColor = Color.FromArgb(20, 16, 28);
+            splitBottom.Dock = DockStyle.Fill;
+            splitBottom.Location = new Point(0, 0);
+            splitBottom.Name = "splitBottom";
+            // 
+            // splitBottom.Panel1
+            // 
+            splitBottom.Panel1.Controls.Add(picPreview);
+            // 
+            // splitBottom.Panel2
+            // 
+            splitBottom.Panel2.Controls.Add(rtbLog);
+            splitBottom.Size = new Size(225, 218);
+            splitBottom.SplitterDistance = 181;
+            splitBottom.TabIndex = 0;
+            // 
+            // splitRight
+            // 
+            splitRight.BackColor = Color.FromArgb(20, 16, 28);
+            splitRight.Dock = DockStyle.Fill;
+            splitRight.Location = new Point(0, 0);
+            splitRight.Name = "splitRight";
+            splitRight.Orientation = Orientation.Horizontal;
+            // 
+            // splitRight.Panel1
+            // 
+            splitRight.Panel1.Controls.Add(panelEdit);
+            // 
+            // splitRight.Panel2
+            // 
+            splitRight.Panel2.Controls.Add(splitBottom);
+            splitRight.Size = new Size(225, 765);
+            splitRight.SplitterDistance = 543;
+            splitRight.TabIndex = 0;
+            // 
+            // splitMain
+            // 
+            splitMain.BackColor = Color.FromArgb(20, 16, 28);
+            splitMain.Dock = DockStyle.Fill;
+            splitMain.Location = new Point(0, 28);
+            splitMain.Name = "splitMain";
+            // 
+            // splitMain.Panel1
+            // 
+            splitMain.Panel1.BackColor = Color.FromArgb(26, 21, 38);
+            splitMain.Panel1.Controls.Add(treeStory);
+            // 
+            // splitMain.Panel2
+            // 
+            splitMain.Panel2.Controls.Add(splitRight);
+            splitMain.Size = new Size(1182, 765);
+            splitMain.SplitterDistance = 953;
+            splitMain.TabIndex = 0;
+            // 
+            // EditorForm
+            // 
+            BackColor = Color.FromArgb(20, 16, 28);
+            ClientSize = new Size(1182, 793);
+            Controls.Add(splitMain);
+            Controls.Add(menuStrip);
+            Font = new Font("Segoe UI", 9.5F);
+            ForeColor = Color.FromArgb(230, 220, 245);
+            MainMenuStrip = menuStrip;
+            MinimumSize = new Size(900, 600);
+            Name = "EditorForm";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Story Engine – Editor";
+            menuStrip.ResumeLayout(false);
+            menuStrip.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)picPreview).EndInit();
+            splitBottom.Panel1.ResumeLayout(false);
+            splitBottom.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitBottom).EndInit();
+            splitBottom.ResumeLayout(false);
+            splitRight.Panel1.ResumeLayout(false);
+            splitRight.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitRight).EndInit();
+            splitRight.ResumeLayout(false);
+            splitMain.Panel1.ResumeLayout(false);
+            splitMain.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitMain).EndInit();
+            splitMain.ResumeLayout(false);
+            ResumeLayout(false);
+            PerformLayout();
         }
     }
 }

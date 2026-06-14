@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Story.Engine;
 using Story.Model;
 using Story.Persistence;
+using Story.Editor.WinForms;
 
 namespace Story.Player.WinForms
 {
@@ -21,7 +22,7 @@ namespace Story.Player.WinForms
             InitializeComponent();
         }
 
-        // ── Story Loading ─────────────────────────────────────────────────────
+        //Story Loading
 
         private void menuOpen_Click(object sender, EventArgs e)
         {
@@ -97,7 +98,7 @@ namespace Story.Player.WinForms
 
         private void menuExit_Click(object sender, EventArgs e) => Close();
 
-        // ── Display ───────────────────────────────────────────────────────────
+        //Display 
 
         private void RefreshDisplay()
         {
@@ -118,13 +119,10 @@ namespace Story.Player.WinForms
             }
             picBackground.Visible = picBackground.Image != null;
 
-            // Narrative text
             rtbNarrative.Text = block.Text;
 
-            // HUD
             RefreshHUD();
 
-            // Decisions
             RefreshDecisions();
 
             if (block.IsFinal)
@@ -158,31 +156,30 @@ namespace Story.Player.WinForms
                 int ipct = Math.Max(0, Math.Min(100, (int)Math.Round(pct)));
 
                 string ht = prop.HudType?.ToLower() ?? "";
-                bool isHealth  = ht == "health"  || prop.Key.Contains("life")   || prop.Key.Contains("health");
-                bool isStamina = ht == "stamina" || prop.Key.Contains("energy") || prop.Key.Contains("stamina");
-                bool isLevel   = ht == "level"   || prop.Key.Contains("level");
+                bool isHealth = ht == "health";
+                bool isStamina = ht == "stamina";
+                bool isLevel = ht == "level";
 
                 if (isHealth && !foundHealth)
                 {
-                    lblHealth.Text = $"❤ {prop.HudLabel}  {(int)val} / {(int)prop.Max}";
+                    lblHealth.Text = $" {prop.HudLabel}  {(int)val} / {(int)prop.Max}";
                     pbHealth.Value = ipct;
                     foundHealth = true;
                 }
                 else if (isStamina && !foundStamina)
                 {
-                    lblStamina.Text = $"⚡ {prop.HudLabel}  {(int)val} / {(int)prop.Max}";
+                    lblStamina.Text = $" {prop.HudLabel}  {(int)val} / {(int)prop.Max}";
                     pbStamina.Value = ipct;
                     foundStamina = true;
                 }
                 else if (isLevel && !foundLevel)
                 {
-                    lblLevel.Text = $"⭐ {prop.HudLabel}  {(int)val} / {(int)prop.Max}";
+                    lblLevel.Text = $" {prop.HudLabel}  {(int)val} / {(int)prop.Max}";
                     pbLevel.Value = ipct;
                     foundLevel = true;
                 }
                 else
                 {
-                    // Extra props as labels
                     var lbl = new Label
                     {
                         Text = $"{prop.HudLabel}: {(int)val}",
@@ -264,6 +261,28 @@ namespace Story.Player.WinForms
         private void PlayerForm_Resize(object sender, EventArgs e)
         {
             RefreshDecisions();
+        }
+
+        private void createStoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EditorForm editorForm = new EditorForm();
+            editorForm.Show();
+
+        }
+
+        private void panelExtraHud_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void pbStamina_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void picBackground_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -42,178 +42,342 @@ namespace Story.Player.WinForms
 
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-
-            // ── Form ─────────────────────────────────────────────────────────
-            this.Text = "Story Engine – Player";
-            this.Size = new System.Drawing.Size(1100, 800);
-            this.MinimumSize = new System.Drawing.Size(800, 600);
-            this.BackColor = System.Drawing.Color.FromArgb(18, 15, 25);
-            this.ForeColor = System.Drawing.Color.FromArgb(230, 220, 245);
-            this.Font = new System.Drawing.Font("Segoe UI", 10f);
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Resize += new System.EventHandler(this.PlayerForm_Resize);
-
-            // ── MenuStrip ────────────────────────────────────────────────────
-            this.menuStrip = new System.Windows.Forms.MenuStrip();
-            this.menuFile = new System.Windows.Forms.ToolStripMenuItem("📂 File");
-            this.menuOpen = new System.Windows.Forms.ToolStripMenuItem("Open Story...");
-            this.menuRestart = new System.Windows.Forms.ToolStripMenuItem("Restart");
-            this.menuSep1 = new System.Windows.Forms.ToolStripSeparator();
-            this.menuSaveState = new System.Windows.Forms.ToolStripMenuItem("Save State...");
-            this.menuLoadState = new System.Windows.Forms.ToolStripMenuItem("Load State...");
-            this.menuSep2 = new System.Windows.Forms.ToolStripSeparator();
-            this.menuExit = new System.Windows.Forms.ToolStripMenuItem("Exit");
-
-            this.menuOpen.Click += new System.EventHandler(this.menuOpen_Click);
-            this.menuRestart.Click += new System.EventHandler(this.menuRestart_Click);
-            this.menuSaveState.Click += new System.EventHandler(this.menuSaveState_Click);
-            this.menuLoadState.Click += new System.EventHandler(this.menuLoadState_Click);
-            this.menuExit.Click += new System.EventHandler(this.menuExit_Click);
-
-            this.menuFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                this.menuOpen, this.menuRestart, this.menuSep1,
-                this.menuSaveState, this.menuLoadState, this.menuSep2,
-                this.menuExit
-            });
-            this.menuStrip.Items.Add(this.menuFile);
-            this.menuStrip.BackColor = System.Drawing.Color.FromArgb(22, 18, 32);
-            this.menuStrip.ForeColor = System.Drawing.Color.FromArgb(230, 220, 245);
-
-            // ── HUD Panel ────────────────────────────────────────────────────
-            this.panelHUD = new System.Windows.Forms.Panel();
-            this.panelHUD.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelHUD.Height = 110;
-            this.panelHUD.BackColor = System.Drawing.Color.FromArgb(28, 23, 38);
-            this.panelHUD.Padding = new System.Windows.Forms.Padding(14, 8, 14, 8);
-
-            // Title
-            this.lblTitle = new System.Windows.Forms.Label();
-            this.lblTitle.Text = "Story Engine";
-            this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 15f, System.Drawing.FontStyle.Bold);
-            this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(180, 120, 255);
-            this.lblTitle.AutoSize = true;
-            this.lblTitle.Location = new System.Drawing.Point(14, 10);
-
-            // Block ID
-            this.lblBlockId = new System.Windows.Forms.Label();
-            this.lblBlockId.Text = "";
-            this.lblBlockId.Font = new System.Drawing.Font("Segoe UI", 8.5f, System.Drawing.FontStyle.Italic);
-            this.lblBlockId.ForeColor = System.Drawing.Color.FromArgb(130, 120, 155);
-            this.lblBlockId.AutoSize = true;
-            this.lblBlockId.Location = new System.Drawing.Point(14, 42);
-
-            // ── Health bar ───────────────────────────────────────────────────
-            int col1 = 270, col2 = 480, col3 = 690, barW = 185, barY1 = 12, barY2 = 34;
-
-            this.lblHealth = new System.Windows.Forms.Label();
-            this.lblHealth.Text = "❤ Health";
-            this.lblHealth.Font = new System.Drawing.Font("Segoe UI", 8.5f, System.Drawing.FontStyle.Bold);
-            this.lblHealth.ForeColor = System.Drawing.Color.FromArgb(220, 210, 240);
-            this.lblHealth.AutoSize = true;
-            this.lblHealth.Location = new System.Drawing.Point(col1, barY1);
-
-            this.pbHealth = new System.Windows.Forms.ProgressBar();
-            this.pbHealth.Location = new System.Drawing.Point(col1, barY2);
-            this.pbHealth.Size = new System.Drawing.Size(barW, 22);
-            this.pbHealth.Minimum = 0;
-            this.pbHealth.Maximum = 100;
-            this.pbHealth.Value = 100;
-            this.pbHealth.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.pbHealth.ForeColor = System.Drawing.Color.FromArgb(80, 200, 120);
-
-            // ── Stamina bar ──────────────────────────────────────────────────
-            this.lblStamina = new System.Windows.Forms.Label();
-            this.lblStamina.Text = "⚡ Stamina";
-            this.lblStamina.Font = new System.Drawing.Font("Segoe UI", 8.5f, System.Drawing.FontStyle.Bold);
-            this.lblStamina.ForeColor = System.Drawing.Color.FromArgb(220, 210, 240);
-            this.lblStamina.AutoSize = true;
-            this.lblStamina.Location = new System.Drawing.Point(col2, barY1);
-
-            this.pbStamina = new System.Windows.Forms.ProgressBar();
-            this.pbStamina.Location = new System.Drawing.Point(col2, barY2);
-            this.pbStamina.Size = new System.Drawing.Size(barW, 22);
-            this.pbStamina.Minimum = 0;
-            this.pbStamina.Maximum = 100;
-            this.pbStamina.Value = 80;
-            this.pbStamina.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.pbStamina.ForeColor = System.Drawing.Color.FromArgb(80, 160, 230);
-
-            // ── Level bar ────────────────────────────────────────────────────
-            this.lblLevel = new System.Windows.Forms.Label();
-            this.lblLevel.Text = "⭐ Level";
-            this.lblLevel.Font = new System.Drawing.Font("Segoe UI", 8.5f, System.Drawing.FontStyle.Bold);
-            this.lblLevel.ForeColor = System.Drawing.Color.FromArgb(220, 210, 240);
-            this.lblLevel.AutoSize = true;
-            this.lblLevel.Location = new System.Drawing.Point(col3, barY1);
-
-            this.pbLevel = new System.Windows.Forms.ProgressBar();
-            this.pbLevel.Location = new System.Drawing.Point(col3, barY2);
-            this.pbLevel.Size = new System.Drawing.Size(barW, 22);
-            this.pbLevel.Minimum = 0;
-            this.pbLevel.Maximum = 100;
-            this.pbLevel.Value = 10;
-            this.pbLevel.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.pbLevel.ForeColor = System.Drawing.Color.FromArgb(230, 180, 50);
-
-            // ── Extra HUD panel (other visible props) ─────────────────────────
-            this.panelExtraHud = new System.Windows.Forms.Panel();
-            this.panelExtraHud.Location = new System.Drawing.Point(col3 + barW + 16, 8);
-            this.panelExtraHud.Size = new System.Drawing.Size(160, 90);
-            this.panelExtraHud.BackColor = System.Drawing.Color.Transparent;
-
-            this.panelHUD.Controls.AddRange(new System.Windows.Forms.Control[] {
-                this.lblTitle, this.lblBlockId,
-                this.lblHealth, this.pbHealth,
-                this.lblStamina, this.pbStamina,
-                this.lblLevel, this.pbLevel,
-                this.panelExtraHud
-            });
-
-            // ── Content Panel ────────────────────────────────────────────────
-            this.panelContent = new System.Windows.Forms.Panel();
-            this.panelContent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelContent.BackColor = System.Drawing.Color.FromArgb(18, 15, 25);
-            this.panelContent.Padding = new System.Windows.Forms.Padding(0);
-
-            // Background image
-            this.picBackground = new System.Windows.Forms.PictureBox();
-            this.picBackground.Dock = System.Windows.Forms.DockStyle.Top;
-            this.picBackground.Height = 260;
-            this.picBackground.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picBackground.BackColor = System.Drawing.Color.FromArgb(22, 18, 32);
-            this.picBackground.Visible = false;
-
-            // Narrative text
-            this.rtbNarrative = new System.Windows.Forms.RichTextBox();
-            this.rtbNarrative.Dock = System.Windows.Forms.DockStyle.Top;
-            this.rtbNarrative.Height = 160;
-            this.rtbNarrative.BackColor = System.Drawing.Color.FromArgb(28, 23, 38);
-            this.rtbNarrative.ForeColor = System.Drawing.Color.FromArgb(230, 220, 245);
-            this.rtbNarrative.Font = new System.Drawing.Font("Georgia", 12f);
-            this.rtbNarrative.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.rtbNarrative.ReadOnly = true;
-            this.rtbNarrative.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.rtbNarrative.Padding = new System.Windows.Forms.Padding(14, 12, 14, 12);
-
-            // Decisions flow panel
-            this.flowDecisions = new System.Windows.Forms.FlowLayoutPanel();
-            this.flowDecisions.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowDecisions.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowDecisions.AutoScroll = true;
-            this.flowDecisions.BackColor = System.Drawing.Color.FromArgb(18, 15, 25);
-            this.flowDecisions.WrapContents = false;
-            this.flowDecisions.Padding = new System.Windows.Forms.Padding(14, 10, 14, 10);
-
-            this.panelContent.Controls.Add(this.flowDecisions);
-            this.panelContent.Controls.Add(this.rtbNarrative);
-            this.panelContent.Controls.Add(this.picBackground);
-
-            // ── Add to Form ──────────────────────────────────────────────────
-            this.MainMenuStrip = this.menuStrip;
-            this.Controls.Add(this.panelContent);
-            this.Controls.Add(this.panelHUD);
-            this.Controls.Add(this.menuStrip);
+            menuStrip = new MenuStrip();
+            menuFile = new ToolStripMenuItem();
+            menuOpen = new ToolStripMenuItem();
+            menuRestart = new ToolStripMenuItem();
+            menuSep1 = new ToolStripSeparator();
+            menuSaveState = new ToolStripMenuItem();
+            menuLoadState = new ToolStripMenuItem();
+            menuSep2 = new ToolStripSeparator();
+            menuExit = new ToolStripMenuItem();
+            createStoryToolStripMenuItem = new ToolStripMenuItem();
+            panelHUD = new Panel();
+            pictureBox2 = new PictureBox();
+            pictureBox1 = new PictureBox();
+            lblTitle = new Label();
+            lblBlockId = new Label();
+            lblHealth = new Label();
+            pbHealth = new ProgressBar();
+            lblStamina = new Label();
+            pbStamina = new ProgressBar();
+            lblLevel = new Label();
+            pbLevel = new ProgressBar();
+            panelExtraHud = new Panel();
+            pictureBox3 = new PictureBox();
+            panelContent = new Panel();
+            flowDecisions = new FlowLayoutPanel();
+            rtbNarrative = new RichTextBox();
+            picBackground = new PictureBox();
+            menuStrip.SuspendLayout();
+            panelHUD.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            panelExtraHud.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
+            panelContent.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)picBackground).BeginInit();
+            SuspendLayout();
+            // 
+            // menuStrip
+            // 
+            menuStrip.BackColor = Color.FromArgb(22, 18, 32);
+            menuStrip.ForeColor = Color.FromArgb(230, 220, 245);
+            menuStrip.ImageScalingSize = new Size(20, 20);
+            menuStrip.Items.AddRange(new ToolStripItem[] { menuFile });
+            menuStrip.Location = new Point(0, 0);
+            menuStrip.Name = "menuStrip";
+            menuStrip.Size = new Size(1082, 28);
+            menuStrip.TabIndex = 2;
+            // 
+            // menuFile
+            // 
+            menuFile.DropDownItems.AddRange(new ToolStripItem[] { menuOpen, menuRestart, menuSep1, menuSaveState, menuLoadState, menuSep2, menuExit, createStoryToolStripMenuItem });
+            menuFile.Name = "menuFile";
+            menuFile.Size = new Size(71, 24);
+            menuFile.Text = "📂 File";
+            // 
+            // menuOpen
+            // 
+            menuOpen.Name = "menuOpen";
+            menuOpen.Size = new Size(175, 26);
+            menuOpen.Text = "Open Story...";
+            menuOpen.Click += menuOpen_Click;
+            // 
+            // menuRestart
+            // 
+            menuRestart.Name = "menuRestart";
+            menuRestart.Size = new Size(175, 26);
+            menuRestart.Text = "Restart";
+            menuRestart.Click += menuRestart_Click;
+            // 
+            // menuSep1
+            // 
+            menuSep1.Name = "menuSep1";
+            menuSep1.Size = new Size(172, 6);
+            // 
+            // menuSaveState
+            // 
+            menuSaveState.Name = "menuSaveState";
+            menuSaveState.Size = new Size(175, 26);
+            menuSaveState.Text = "Save State...";
+            menuSaveState.Click += menuSaveState_Click;
+            // 
+            // menuLoadState
+            // 
+            menuLoadState.Name = "menuLoadState";
+            menuLoadState.Size = new Size(175, 26);
+            menuLoadState.Text = "Load State...";
+            menuLoadState.Click += menuLoadState_Click;
+            // 
+            // menuSep2
+            // 
+            menuSep2.Name = "menuSep2";
+            menuSep2.Size = new Size(172, 6);
+            // 
+            // menuExit
+            // 
+            menuExit.Name = "menuExit";
+            menuExit.Size = new Size(175, 26);
+            menuExit.Text = "Exit";
+            menuExit.Click += menuExit_Click;
+            // 
+            // createStoryToolStripMenuItem
+            // 
+            createStoryToolStripMenuItem.Name = "createStoryToolStripMenuItem";
+            createStoryToolStripMenuItem.Size = new Size(175, 26);
+            createStoryToolStripMenuItem.Text = "Create Story";
+            createStoryToolStripMenuItem.Click += createStoryToolStripMenuItem_Click;
+            // 
+            // panelHUD
+            // 
+            panelHUD.BackColor = Color.FromArgb(28, 23, 38);
+            panelHUD.Controls.Add(pictureBox2);
+            panelHUD.Controls.Add(pictureBox1);
+            panelHUD.Controls.Add(lblTitle);
+            panelHUD.Controls.Add(lblBlockId);
+            panelHUD.Controls.Add(lblHealth);
+            panelHUD.Controls.Add(pbHealth);
+            panelHUD.Controls.Add(lblStamina);
+            panelHUD.Controls.Add(pbStamina);
+            panelHUD.Controls.Add(lblLevel);
+            panelHUD.Controls.Add(pbLevel);
+            panelHUD.Controls.Add(panelExtraHud);
+            panelHUD.Dock = DockStyle.Top;
+            panelHUD.Location = new Point(0, 28);
+            panelHUD.Name = "panelHUD";
+            panelHUD.Padding = new Padding(14, 8, 14, 8);
+            panelHUD.Size = new Size(1082, 110);
+            panelHUD.TabIndex = 1;
+            // 
+            // pictureBox2
+            // 
+            pictureBox2.Image = Properties.Resources.icons8_flash_331;
+            pictureBox2.Location = new Point(478, 6);
+            pictureBox2.Name = "pictureBox2";
+            pictureBox2.Size = new Size(33, 30);
+            pictureBox2.TabIndex = 10;
+            pictureBox2.TabStop = false;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Image = Properties.Resources.icons8_health_332;
+            pictureBox1.Location = new Point(270, 3);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(33, 33);
+            pictureBox1.SizeMode = PictureBoxSizeMode.AutoSize;
+            pictureBox1.TabIndex = 9;
+            pictureBox1.TabStop = false;
+            // 
+            // lblTitle
+            // 
+            lblTitle.AutoSize = true;
+            lblTitle.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            lblTitle.ForeColor = Color.FromArgb(180, 120, 255);
+            lblTitle.Location = new Point(14, 10);
+            lblTitle.Name = "lblTitle";
+            lblTitle.Size = new Size(163, 35);
+            lblTitle.TabIndex = 0;
+            lblTitle.Text = "Story Engine";
+            // 
+            // lblBlockId
+            // 
+            lblBlockId.AutoSize = true;
+            lblBlockId.Font = new Font("Segoe UI", 8.5F, FontStyle.Italic);
+            lblBlockId.ForeColor = Color.FromArgb(130, 120, 155);
+            lblBlockId.Location = new Point(14, 42);
+            lblBlockId.Name = "lblBlockId";
+            lblBlockId.Size = new Size(0, 20);
+            lblBlockId.TabIndex = 1;
+            // 
+            // lblHealth
+            // 
+            lblHealth.AutoSize = true;
+            lblHealth.Font = new Font("Segoe UI", 8.5F, FontStyle.Bold);
+            lblHealth.ForeColor = Color.FromArgb(220, 210, 240);
+            lblHealth.Location = new Point(309, 10);
+            lblHealth.Name = "lblHealth";
+            lblHealth.Size = new Size(59, 20);
+            lblHealth.TabIndex = 2;
+            lblHealth.Text = " Health";
+            // 
+            // pbHealth
+            // 
+            pbHealth.ForeColor = Color.FromArgb(80, 200, 120);
+            pbHealth.Location = new Point(270, 36);
+            pbHealth.Name = "pbHealth";
+            pbHealth.Size = new Size(185, 22);
+            pbHealth.Style = ProgressBarStyle.Continuous;
+            pbHealth.TabIndex = 3;
+            pbHealth.Value = 100;
+            // 
+            // lblStamina
+            // 
+            lblStamina.AutoSize = true;
+            lblStamina.Font = new Font("Segoe UI", 8.5F, FontStyle.Bold);
+            lblStamina.ForeColor = Color.FromArgb(220, 210, 240);
+            lblStamina.Location = new Point(509, 11);
+            lblStamina.Name = "lblStamina";
+            lblStamina.Size = new Size(70, 20);
+            lblStamina.TabIndex = 4;
+            lblStamina.Text = " Stamina";
+            // 
+            // pbStamina
+            // 
+            pbStamina.ForeColor = Color.FromArgb(80, 160, 230);
+            pbStamina.Location = new Point(480, 36);
+            pbStamina.Name = "pbStamina";
+            pbStamina.Size = new Size(185, 22);
+            pbStamina.Style = ProgressBarStyle.Continuous;
+            pbStamina.TabIndex = 5;
+            pbStamina.Value = 80;
+            pbStamina.Click += pbStamina_Click;
+            // 
+            // lblLevel
+            // 
+            lblLevel.AutoSize = true;
+            lblLevel.Font = new Font("Segoe UI", 8.5F, FontStyle.Bold);
+            lblLevel.ForeColor = Color.FromArgb(220, 210, 240);
+            lblLevel.Location = new Point(732, 11);
+            lblLevel.Name = "lblLevel";
+            lblLevel.Size = new Size(49, 20);
+            lblLevel.TabIndex = 6;
+            lblLevel.Text = " Level";
+            // 
+            // pbLevel
+            // 
+            pbLevel.ForeColor = Color.FromArgb(230, 180, 50);
+            pbLevel.Location = new Point(690, 36);
+            pbLevel.Name = "pbLevel";
+            pbLevel.Size = new Size(185, 22);
+            pbLevel.Style = ProgressBarStyle.Continuous;
+            pbLevel.TabIndex = 7;
+            pbLevel.Value = 10;
+            // 
+            // panelExtraHud
+            // 
+            panelExtraHud.BackColor = Color.Transparent;
+            panelExtraHud.Controls.Add(pictureBox3);
+            panelExtraHud.Location = new Point(690, 8);
+            panelExtraHud.Name = "panelExtraHud";
+            panelExtraHud.Size = new Size(160, 90);
+            panelExtraHud.TabIndex = 8;
+            panelExtraHud.Paint += panelExtraHud_Paint;
+            // 
+            // pictureBox3
+            // 
+            pictureBox3.Image = Properties.Resources.icons8_level_33;
+            pictureBox3.Location = new Point(3, -5);
+            pictureBox3.Name = "pictureBox3";
+            pictureBox3.Size = new Size(38, 31);
+            pictureBox3.TabIndex = 11;
+            pictureBox3.TabStop = false;
+            // 
+            // panelContent
+            // 
+            panelContent.BackColor = Color.FromArgb(18, 15, 25);
+            panelContent.Controls.Add(flowDecisions);
+            panelContent.Controls.Add(rtbNarrative);
+            panelContent.Controls.Add(picBackground);
+            panelContent.Dock = DockStyle.Fill;
+            panelContent.Location = new Point(0, 138);
+            panelContent.Name = "panelContent";
+            panelContent.Size = new Size(1082, 615);
+            panelContent.TabIndex = 0;
+            // 
+            // flowDecisions
+            // 
+            flowDecisions.AutoScroll = true;
+            flowDecisions.BackColor = Color.FromArgb(18, 15, 25);
+            flowDecisions.Dock = DockStyle.Fill;
+            flowDecisions.FlowDirection = FlowDirection.TopDown;
+            flowDecisions.Location = new Point(0, 554);
+            flowDecisions.Name = "flowDecisions";
+            flowDecisions.Padding = new Padding(14, 10, 14, 10);
+            flowDecisions.Size = new Size(1082, 61);
+            flowDecisions.TabIndex = 0;
+            flowDecisions.WrapContents = false;
+            // 
+            // rtbNarrative
+            // 
+            rtbNarrative.BackColor = Color.FromArgb(28, 23, 38);
+            rtbNarrative.BorderStyle = BorderStyle.None;
+            rtbNarrative.Dock = DockStyle.Top;
+            rtbNarrative.Font = new Font("Georgia", 12F);
+            rtbNarrative.ForeColor = Color.FromArgb(230, 220, 245);
+            rtbNarrative.Location = new Point(0, 377);
+            rtbNarrative.Name = "rtbNarrative";
+            rtbNarrative.ReadOnly = true;
+            rtbNarrative.ScrollBars = RichTextBoxScrollBars.Vertical;
+            rtbNarrative.Size = new Size(1082, 177);
+            rtbNarrative.TabIndex = 1;
+            rtbNarrative.Text = "";
+            // 
+            // picBackground
+            // 
+            picBackground.BackColor = Color.FromArgb(22, 18, 32);
+            picBackground.Dock = DockStyle.Top;
+            picBackground.Location = new Point(0, 0);
+            picBackground.Name = "picBackground";
+            picBackground.Size = new Size(1082, 377);
+            picBackground.SizeMode = PictureBoxSizeMode.Zoom;
+            picBackground.TabIndex = 2;
+            picBackground.TabStop = false;
+            picBackground.Visible = false;
+            picBackground.Click += picBackground_Click;
+            // 
+            // PlayerForm
+            // 
+            BackColor = Color.FromArgb(18, 15, 25);
+            ClientSize = new Size(1082, 753);
+            Controls.Add(panelContent);
+            Controls.Add(panelHUD);
+            Controls.Add(menuStrip);
+            Font = new Font("Segoe UI", 10F);
+            ForeColor = Color.FromArgb(230, 220, 245);
+            MainMenuStrip = menuStrip;
+            MinimumSize = new Size(800, 600);
+            Name = "PlayerForm";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Story Engine – Player";
+            Resize += PlayerForm_Resize;
+            menuStrip.ResumeLayout(false);
+            menuStrip.PerformLayout();
+            panelHUD.ResumeLayout(false);
+            panelHUD.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            panelExtraHud.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
+            panelContent.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)picBackground).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
+
+        private ToolStripMenuItem createStoryToolStripMenuItem;
+        private PictureBox pictureBox1;
+        private PictureBox pictureBox2;
+        private PictureBox pictureBox3;
     }
 }
