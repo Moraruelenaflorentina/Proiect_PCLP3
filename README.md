@@ -93,12 +93,3 @@ Operatori acceptați: `<`, `<=`, `>`, `>=`, `==`, `!=`
 { "type": "ADD", "property": "player.life", "value": -20 }   // scade viața cu 20
 { "type": "SET", "property": "story.hasKey", "value": 1 }    // setează direct la 1
 ```
-
-## Exemplu de poveste inclusă
-
-`MareaEvadare_Example.zip` – o poveste demo cu:
-- 10 blocuri narative
-- Proprietăți: Health, Stamina, Level, Bani, Cheie
-- Condiții AND/OR pe decizii
-- Efecte multiple
-- Două finaluri (evadare / moarte)
