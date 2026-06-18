@@ -21,7 +21,7 @@ namespace Story.Editor.WinForms
             NewStory();
         }
 
-        // ── Menu handlers ─────────────────────────────────────────────────────
+        //Menu handlers
 
         private void menuNew_Click(object sender, EventArgs e) => NewStory();
 
@@ -67,7 +67,7 @@ namespace Story.Editor.WinForms
 
         private void menuExit_Click(object sender, EventArgs e) => Close();
 
-        // ── Story operations ──────────────────────────────────────────────────
+        //Story operations
 
         private void NewStory()
         {
@@ -95,8 +95,7 @@ namespace Story.Editor.WinForms
             rtbLog.Text = "New story created.";
         }
 
-        // ── Tree ──────────────────────────────────────────────────────────────
-
+        // Tree
         private void RefreshTree()
         {
             treeStory.Nodes.Clear();
@@ -140,8 +139,7 @@ namespace Story.Editor.WinForms
             picPreview.Image = null;
         }
 
-        // ── Story meta ────────────────────────────────────────────────────────
-
+        //Story meta
         private void ShowStoryMeta()
         {
             var pnl = MakeScrollPanel();
@@ -164,8 +162,7 @@ namespace Story.Editor.WinForms
             panelEdit.Controls.Add(pnl);
         }
 
-        // ── Property editor ───────────────────────────────────────────────────
-
+        //Property editor
         private void AddProperty()
         {
             var p = new StatePropertyDefinition { Key = "new.property", Min = 0, Max = 100, Initial = 50, VisibleInHud = true };
@@ -229,8 +226,7 @@ namespace Story.Editor.WinForms
             panelEdit.Controls.Add(pnl);
         }
 
-        // ── Block editor ──────────────────────────────────────────────────────
-
+        //Block editor
         private void AddBlock()
         {
             var b = new StoryBlock { Id = "new.block", Text = "Block text here.", Decisions = new() };
@@ -263,7 +259,7 @@ namespace Story.Editor.WinForms
 
             var cbFinal = AddCheckField(pnl, "Is Final Block (end of story)", block.IsFinal);
 
-            // Background image
+            //Background image
             AddHeader(pnl, "Background Image");
             var lblImg = new Label
             {
@@ -295,7 +291,7 @@ namespace Story.Editor.WinForms
                 if (File.Exists(ip)) try { picPreview.Image = Image.FromFile(ip); } catch { }
             }
 
-            // Apply block button
+            //block button
             AddSpacer(pnl);
             var btnApply = MakeButton("💾 Apply Block");
             btnApply.Click += (s, e) =>
@@ -307,7 +303,7 @@ namespace Story.Editor.WinForms
                 RefreshTree();
             };
 
-            // Decisions
+            //decisions
             AddHeader(pnl, "Decisions");
             var grid = BuildDecisionsGrid(block, pnl);
             pnl.Controls.Add(grid);
@@ -397,8 +393,7 @@ namespace Story.Editor.WinForms
             return grid;
         }
 
-        // ── Decision dialog ───────────────────────────────────────────────────
-
+        //Decision dialog
         private void ShowDecisionDialog(DecisionDefinition dec)
         {
             using var dlg = new Form
@@ -423,17 +418,17 @@ namespace Story.Editor.WinForms
                 WrapContents = false
             };
 
-            // Decision text
+            //decision text
             flow.Controls.Add(SectionLabel("Decision Text"));
             var tbText = new TextBox { Text = dec.Text, Width = 620, BackColor = Color.FromArgb(32, 26, 46), ForeColor = Color.FromArgb(230, 220, 245), BorderStyle = BorderStyle.FixedSingle };
             flow.Controls.Add(tbText);
 
-            // Target block
+            //target block
             flow.Controls.Add(SectionLabel("Target Block ID"));
             var tbTarget = new TextBox { Text = dec.TargetBlock, Width = 320, BackColor = Color.FromArgb(32, 26, 46), ForeColor = Color.FromArgb(230, 220, 245), BorderStyle = BorderStyle.FixedSingle };
             flow.Controls.Add(tbTarget);
 
-            // Icon
+            //icon
             flow.Controls.Add(SectionLabel("Icon Image"));
             var lblIcon = new Label { Text = dec.Icon ?? "(none)", ForeColor = Color.FromArgb(140, 130, 180), AutoSize = true };
             flow.Controls.Add(lblIcon);
@@ -451,7 +446,7 @@ namespace Story.Editor.WinForms
             };
             flow.Controls.Add(btnIcon);
 
-            // Effects grid
+            //effects grid
             flow.Controls.Add(SectionLabel("Effects  (double-click row to edit; last row = new)"));
             var propKeys = _story.Properties.Select(p => p.Key).ToArray();
             var effectsGrid = new DataGridView
@@ -479,8 +474,8 @@ namespace Story.Editor.WinForms
             }
             flow.Controls.Add(effectsGrid);
 
-            // Condition JSON
-            flow.Controls.Add(SectionLabel("Condition (JSON AST – leave blank for none)"));
+            //condition JSON
+            flow.Controls.Add(SectionLabel("Condition (JSON AST - leave blank for none)"));
             flow.Controls.Add(new Label
             {
                 Text = "Example: {\"type\":\"COMPARISON\",\"property\":\"inventory.money\",\"operator\":\">=\",\"value\":5}",
@@ -505,10 +500,10 @@ namespace Story.Editor.WinForms
             };
             flow.Controls.Add(rtbCond);
 
-            // Save button
+            //Save button
             var btnSave = new Button
             {
-                Text = "💾 Save Decision",
+                Text = "Save Decision",
                 Width = 180,
                 Height = 36,
                 BackColor = Color.FromArgb(35, 80, 35),
@@ -553,8 +548,7 @@ namespace Story.Editor.WinForms
             dlg.ShowDialog(this);
         }
 
-        // ── UI helpers ────────────────────────────────────────────────────────
-
+        //UI helpers
         private FlowLayoutPanel MakeScrollPanel() => new FlowLayoutPanel
         {
             Dock = DockStyle.Fill,
@@ -637,8 +631,7 @@ namespace Story.Editor.WinForms
             return row;
         }
 
-        // ── Utility ───────────────────────────────────────────────────────────
-
+        //Utility
         private static double TryDouble(string s, double fallback) =>
             double.TryParse(s, System.Globalization.NumberStyles.Any,
                 System.Globalization.CultureInfo.InvariantCulture, out double v) ? v : fallback;
@@ -650,6 +643,11 @@ namespace Story.Editor.WinForms
             string.IsNullOrWhiteSpace(s) ? null : s.Trim();
 
         private void menuItemTools_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void menuItemFile_Click(object sender, EventArgs e)
         {
 
         }

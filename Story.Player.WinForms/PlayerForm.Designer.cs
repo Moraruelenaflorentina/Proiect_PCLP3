@@ -9,10 +9,8 @@ namespace Story.Player.WinForms
         private System.Windows.Forms.ToolStripMenuItem menuFile;
         private System.Windows.Forms.ToolStripMenuItem menuOpen;
         private System.Windows.Forms.ToolStripMenuItem menuRestart;
-        private System.Windows.Forms.ToolStripSeparator menuSep1;
         private System.Windows.Forms.ToolStripMenuItem menuSaveState;
         private System.Windows.Forms.ToolStripMenuItem menuLoadState;
-        private System.Windows.Forms.ToolStripSeparator menuSep2;
         private System.Windows.Forms.ToolStripMenuItem menuExit;
 
         // ── HUD Panel ─────────────────────────────────────────────────────────
@@ -42,14 +40,13 @@ namespace Story.Player.WinForms
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PlayerForm));
             menuStrip = new MenuStrip();
             menuFile = new ToolStripMenuItem();
-            menuOpen = new ToolStripMenuItem();
             menuRestart = new ToolStripMenuItem();
-            menuSep1 = new ToolStripSeparator();
+            menuOpen = new ToolStripMenuItem();
             menuSaveState = new ToolStripMenuItem();
             menuLoadState = new ToolStripMenuItem();
-            menuSep2 = new ToolStripSeparator();
             menuExit = new ToolStripMenuItem();
             createStoryToolStripMenuItem = new ToolStripMenuItem();
             panelHUD = new Panel();
@@ -92,60 +89,68 @@ namespace Story.Player.WinForms
             // 
             // menuFile
             // 
-            menuFile.DropDownItems.AddRange(new ToolStripItem[] { menuOpen, menuRestart, menuSep1, menuSaveState, menuLoadState, menuSep2, menuExit, createStoryToolStripMenuItem });
+            menuFile.DropDownItems.AddRange(new ToolStripItem[] { menuRestart, menuOpen, menuSaveState, menuLoadState, menuExit, createStoryToolStripMenuItem });
             menuFile.Name = "menuFile";
             menuFile.Size = new Size(71, 24);
             menuFile.Text = "📂 File";
             // 
-            // menuOpen
-            // 
-            menuOpen.Name = "menuOpen";
-            menuOpen.Size = new Size(175, 26);
-            menuOpen.Text = "Open Story...";
-            menuOpen.Click += menuOpen_Click;
-            // 
             // menuRestart
             // 
+            menuRestart.BackColor = Color.FromArgb(22, 18, 32);
+            menuRestart.ForeColor = SystemColors.ButtonFace;
             menuRestart.Name = "menuRestart";
-            menuRestart.Size = new Size(175, 26);
+            menuRestart.ShortcutKeys = Keys.Control | Keys.Shift | Keys.R;
+            menuRestart.Size = new Size(260, 26);
             menuRestart.Text = "Restart";
             menuRestart.Click += menuRestart_Click;
             // 
-            // menuSep1
+            // menuOpen
             // 
-            menuSep1.Name = "menuSep1";
-            menuSep1.Size = new Size(172, 6);
+            menuOpen.BackColor = Color.FromArgb(22, 18, 32);
+            menuOpen.ForeColor = SystemColors.ButtonFace;
+            menuOpen.Name = "menuOpen";
+            menuOpen.ShortcutKeys = Keys.Control | Keys.O;
+            menuOpen.Size = new Size(260, 26);
+            menuOpen.Text = "Open Story...";
+            menuOpen.Click += menuOpen_Click;
             // 
             // menuSaveState
             // 
+            menuSaveState.BackColor = Color.FromArgb(22, 18, 32);
+            menuSaveState.ForeColor = SystemColors.ButtonFace;
             menuSaveState.Name = "menuSaveState";
-            menuSaveState.Size = new Size(175, 26);
+            menuSaveState.ShortcutKeys = Keys.Control | Keys.Shift | Keys.S;
+            menuSaveState.Size = new Size(260, 26);
             menuSaveState.Text = "Save State...";
             menuSaveState.Click += menuSaveState_Click;
             // 
             // menuLoadState
             // 
+            menuLoadState.BackColor = Color.FromArgb(22, 18, 32);
+            menuLoadState.ForeColor = SystemColors.ButtonFace;
             menuLoadState.Name = "menuLoadState";
-            menuLoadState.Size = new Size(175, 26);
+            menuLoadState.ShortcutKeys = Keys.Control | Keys.L;
+            menuLoadState.Size = new Size(260, 26);
             menuLoadState.Text = "Load State...";
             menuLoadState.Click += menuLoadState_Click;
             // 
-            // menuSep2
-            // 
-            menuSep2.Name = "menuSep2";
-            menuSep2.Size = new Size(172, 6);
-            // 
             // menuExit
             // 
+            menuExit.BackColor = Color.FromArgb(22, 18, 32);
+            menuExit.ForeColor = SystemColors.ButtonFace;
             menuExit.Name = "menuExit";
-            menuExit.Size = new Size(175, 26);
+            menuExit.ShortcutKeys = Keys.Control | Keys.E;
+            menuExit.Size = new Size(260, 26);
             menuExit.Text = "Exit";
             menuExit.Click += menuExit_Click;
             // 
             // createStoryToolStripMenuItem
             // 
+            createStoryToolStripMenuItem.BackColor = Color.FromArgb(22, 18, 32);
+            createStoryToolStripMenuItem.ForeColor = SystemColors.ButtonFace;
             createStoryToolStripMenuItem.Name = "createStoryToolStripMenuItem";
-            createStoryToolStripMenuItem.Size = new Size(175, 26);
+            createStoryToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.N;
+            createStoryToolStripMenuItem.Size = new Size(260, 26);
             createStoryToolStripMenuItem.Text = "Create Story";
             createStoryToolStripMenuItem.Click += createStoryToolStripMenuItem_Click;
             // 
@@ -173,7 +178,7 @@ namespace Story.Player.WinForms
             // pictureBox2
             // 
             pictureBox2.Image = Properties.Resources.icons8_flash_331;
-            pictureBox2.Location = new Point(478, 6);
+            pictureBox2.Location = new Point(478, 2);
             pictureBox2.Name = "pictureBox2";
             pictureBox2.Size = new Size(33, 30);
             pictureBox2.TabIndex = 10;
@@ -182,7 +187,7 @@ namespace Story.Player.WinForms
             // pictureBox1
             // 
             pictureBox1.Image = Properties.Resources.icons8_health_332;
-            pictureBox1.Location = new Point(270, 3);
+            pictureBox1.Location = new Point(270, 1);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(33, 33);
             pictureBox1.SizeMode = PictureBoxSizeMode.AutoSize;
@@ -287,7 +292,7 @@ namespace Story.Player.WinForms
             // pictureBox3
             // 
             pictureBox3.Image = Properties.Resources.icons8_level_33;
-            pictureBox3.Location = new Point(3, -5);
+            pictureBox3.Location = new Point(3, -8);
             pictureBox3.Name = "pictureBox3";
             pictureBox3.Size = new Size(38, 31);
             pictureBox3.TabIndex = 11;
@@ -355,6 +360,7 @@ namespace Story.Player.WinForms
             Controls.Add(menuStrip);
             Font = new Font("Segoe UI", 10F);
             ForeColor = Color.FromArgb(230, 220, 245);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip;
             MinimumSize = new Size(800, 600);
             Name = "PlayerForm";

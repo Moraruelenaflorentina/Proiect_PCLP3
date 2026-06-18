@@ -9,9 +9,7 @@ namespace Story.Editor.WinForms
         private System.Windows.Forms.ToolStripMenuItem menuItemFile;
         private System.Windows.Forms.ToolStripMenuItem menuNew;
         private System.Windows.Forms.ToolStripMenuItem menuOpen;
-        private System.Windows.Forms.ToolStripSeparator menuSep1;
         private System.Windows.Forms.ToolStripMenuItem menuSave;
-        private System.Windows.Forms.ToolStripSeparator menuSep2;
         private System.Windows.Forms.ToolStripMenuItem menuExit;
         private System.Windows.Forms.ToolStripMenuItem menuItemTools;
         private System.Windows.Forms.ToolStripMenuItem menuValidate;
@@ -39,13 +37,12 @@ namespace Story.Editor.WinForms
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditorForm));
             menuStrip = new MenuStrip();
             menuItemFile = new ToolStripMenuItem();
             menuNew = new ToolStripMenuItem();
             menuOpen = new ToolStripMenuItem();
-            menuSep1 = new ToolStripSeparator();
             menuSave = new ToolStripMenuItem();
-            menuSep2 = new ToolStripSeparator();
             menuExit = new ToolStripMenuItem();
             menuItemTools = new ToolStripMenuItem();
             menuValidate = new ToolStripMenuItem();
@@ -85,46 +82,50 @@ namespace Story.Editor.WinForms
             // 
             // menuItemFile
             // 
-            menuItemFile.DropDownItems.AddRange(new ToolStripItem[] { menuNew, menuOpen, menuSep1, menuSave, menuSep2, menuExit });
+            menuItemFile.DropDownItems.AddRange(new ToolStripItem[] { menuNew, menuOpen, menuSave, menuExit });
             menuItemFile.Name = "menuItemFile";
+            menuItemFile.ShortcutKeys = Keys.Control | Keys.F;
             menuItemFile.Size = new Size(71, 24);
             menuItemFile.Text = "📂 File";
+            menuItemFile.Click += menuItemFile_Click;
             // 
             // menuNew
             // 
+            menuNew.BackColor = Color.FromArgb(22, 18, 32);
+            menuNew.ForeColor = SystemColors.ButtonFace;
             menuNew.Name = "menuNew";
-            menuNew.Size = new Size(224, 26);
+            menuNew.ShortcutKeys = Keys.Control | Keys.N;
+            menuNew.Size = new Size(260, 26);
             menuNew.Text = "New Story";
             menuNew.Click += menuNew_Click;
             // 
             // menuOpen
             // 
+            menuOpen.BackColor = Color.FromArgb(22, 18, 32);
+            menuOpen.ForeColor = SystemColors.ButtonFace;
             menuOpen.Name = "menuOpen";
-            menuOpen.Size = new Size(224, 26);
+            menuOpen.ShortcutKeys = Keys.Control | Keys.O;
+            menuOpen.Size = new Size(260, 26);
             menuOpen.Text = "Open Story...";
             menuOpen.Click += menuOpen_Click;
             // 
-            // menuSep1
-            // 
-            menuSep1.Name = "menuSep1";
-            menuSep1.Size = new Size(221, 6);
-            // 
             // menuSave
             // 
+            menuSave.BackColor = Color.FromArgb(22, 18, 32);
+            menuSave.ForeColor = SystemColors.ButtonFace;
             menuSave.Name = "menuSave";
-            menuSave.Size = new Size(224, 26);
+            menuSave.ShortcutKeys = Keys.Control | Keys.Shift | Keys.S;
+            menuSave.Size = new Size(260, 26);
             menuSave.Text = "Save Story...";
             menuSave.Click += menuSave_Click;
             // 
-            // menuSep2
-            // 
-            menuSep2.Name = "menuSep2";
-            menuSep2.Size = new Size(221, 6);
-            // 
             // menuExit
             // 
+            menuExit.BackColor = Color.FromArgb(22, 18, 32);
+            menuExit.ForeColor = SystemColors.ButtonFace;
             menuExit.Name = "menuExit";
-            menuExit.Size = new Size(224, 26);
+            menuExit.ShortcutKeys = Keys.Control | Keys.E;
+            menuExit.Size = new Size(260, 26);
             menuExit.Text = "Exit";
             menuExit.Click += menuExit_Click;
             // 
@@ -132,14 +133,18 @@ namespace Story.Editor.WinForms
             // 
             menuItemTools.DropDownItems.AddRange(new ToolStripItem[] { menuValidate });
             menuItemTools.Name = "menuItemTools";
+            menuItemTools.ShortcutKeys = Keys.Control | Keys.T;
             menuItemTools.Size = new Size(83, 24);
             menuItemTools.Text = "🔧 Tools";
             menuItemTools.Click += menuItemTools_Click;
             // 
             // menuValidate
             // 
+            menuValidate.BackColor = Color.FromArgb(22, 18, 32);
+            menuValidate.ForeColor = SystemColors.ButtonFace;
             menuValidate.Name = "menuValidate";
-            menuValidate.Size = new Size(224, 26);
+            menuValidate.ShortcutKeys = Keys.Control | Keys.V;
+            menuValidate.Size = new Size(235, 26);
             menuValidate.Text = "Validate Story";
             menuValidate.Click += menuValidate_Click;
             // 
@@ -256,6 +261,7 @@ namespace Story.Editor.WinForms
             Controls.Add(menuStrip);
             Font = new Font("Segoe UI", 9.5F);
             ForeColor = Color.FromArgb(230, 220, 245);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip;
             MinimumSize = new Size(900, 600);
             Name = "EditorForm";

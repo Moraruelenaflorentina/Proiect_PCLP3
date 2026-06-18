@@ -11,4 +11,7 @@
     <ProjectReference Include="..\Story.Engine\Story.Engine.csproj" />
     <ProjectReference Include="..\Story.Persistence\Story.Persistence.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Images\" />
+  </ItemGroup>
 </Project>
