@@ -1,13 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Story.Editor.WinForms;
 using Story.Engine;
 using Story.Model;
 using Story.Persistence;
-using Story.Editor.WinForms;
+using Story.Player.WinForms.UI;
 
 namespace Story.Player.WinForms
 {
@@ -20,16 +19,18 @@ namespace Story.Player.WinForms
         public PlayerForm()
         {
             InitializeComponent();
+
+            canvas.OnChoiceClicked = HandleChoice;
+            canvas.OnRestartClicked = () => menuRestart_Click(this, EventArgs.Empty);
+            canvas.StoryTitle = "StoryTeller";
         }
 
-        //Story Loading
-
-        private void menuOpen_Click(object sender, EventArgs e)
+        private void menuOpen_Click(object? sender, EventArgs e)
         {
             using var dlg = new OpenFileDialog
             {
-                Title = "Open Story File",
-                Filter = "Story archives (*.zip)|*.zip|All files (*.*)|*.*"
+                Title  = "Deschide povestea (.zip)",
+                Filter = "Arhive poveste (*.zip)|*.zip|Toate fișierele (*.*)|*.*"
             };
             if (dlg.ShowDialog() != DialogResult.OK) return;
             try
@@ -37,252 +38,110 @@ namespace Story.Player.WinForms
                 var (story, tempDir) = StoryRepository.LoadFromZip(dlg.FileName);
                 _tempDir = tempDir;
                 _lastZipPath = dlg.FileName;
+                canvas.TempImageDir = tempDir;
+                canvas.StoryTitle = story.Title;
                 _engine.LoadStory(story);
-                RefreshDisplay();
+                RefreshScene();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error loading story:\n" + ex.Message, "Error",
+                MessageBox.Show("Eroare la încărcare:\n" + ex.Message, "Eroare",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void menuRestart_Click(object sender, EventArgs e)
+        private void menuRestart_Click(object? sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(_lastZipPath)) return;
             try
             {
                 var (story, tempDir) = StoryRepository.LoadFromZip(_lastZipPath);
                 _tempDir = tempDir;
+                canvas.TempImageDir = tempDir;
+                canvas.StoryTitle = story.Title;
                 _engine.LoadStory(story);
-                RefreshDisplay();
+                RefreshScene();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Restart failed: " + ex.Message, "Error",
+                MessageBox.Show("Reluarea a eșuat: " + ex.Message, "Eroare",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void menuSaveState_Click(object sender, EventArgs e)
+        private void menuSaveState_Click(object? sender, EventArgs e)
         {
             if (_engine.CurrentBlock == null) return;
-            using var dlg = new SaveFileDialog { Filter = "State files (*.json)|*.json", Title = "Save State" };
+            using var dlg = new SaveFileDialog
+            {
+                Filter = "Stare poveste (*.json)|*.json",
+                Title  = "Salvează starea"
+            };
             if (dlg.ShowDialog() != DialogResult.OK) return;
-            var data = new { Block = _engine.CurrentBlock.Id, State = _engine.State.Serialize() };
+            var data = new
+            {
+                Block = _engine.CurrentBlock.Id,
+                State = _engine.State.Serialize()
+            };
             File.WriteAllText(dlg.FileName, System.Text.Json.JsonSerializer.Serialize(data));
-            MessageBox.Show("State saved.", "Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Starea a fost salvată.", "Salvat",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void menuLoadState_Click(object sender, EventArgs e)
+        private void menuLoadState_Click(object? sender, EventArgs e)
         {
             if (_engine.CurrentBlock == null) return;
-            using var dlg = new OpenFileDialog { Filter = "State files (*.json)|*.json", Title = "Load State" };
+            using var dlg = new OpenFileDialog
+            {
+                Filter = "Stare poveste (*.json)|*.json",
+                Title  = "Încarcă starea"
+            };
             if (dlg.ShowDialog() != DialogResult.OK) return;
             try
             {
                 var json = File.ReadAllText(dlg.FileName);
                 var data = System.Text.Json.JsonSerializer.Deserialize<System.Text.Json.JsonElement>(json);
-                string blockId = data.GetProperty("Block").GetString()!;
+                string blockId   = data.GetProperty("Block").GetString()!;
                 string stateJson = data.GetProperty("State").GetString()!;
                 _engine.State.Deserialize(stateJson);
                 _engine.NavigateTo(blockId);
-                RefreshDisplay();
+                RefreshScene();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error loading state:\n" + ex.Message, "Error",
+                MessageBox.Show("Eroare la încărcarea stării:\n" + ex.Message, "Eroare",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void menuExit_Click(object sender, EventArgs e) => Close();
+        private void menuExit_Click(object? sender, EventArgs e) => Close();
 
-        //Display 
+        private void createStoryToolStripMenuItem_Click(object? sender, EventArgs e)
+        {
+            var editorForm = new EditorForm();
+            editorForm.Show();
+        }
 
-        private void RefreshDisplay()
+        private void HandleChoice(DecisionDefinition d)
+        {
+            string? redirect = _engine.MakeDecision(d);
+            _engine.NavigateTo(redirect ?? d.TargetBlock);
+            RefreshScene();
+        }
+
+        private void RefreshScene()
         {
             var block = _engine.CurrentBlock;
             if (block == null) return;
 
-            lblTitle.Text = _engine.StoryTitle;
-            lblBlockId.Text = "Block: " + block.Id;
+            var decisions = block.IsFinal ? new System.Collections.Generic.List<DecisionDefinition>()
+                                          : _engine.GetAvailableDecisions();
 
-            // Background image
-            picBackground.Image?.Dispose();
-            picBackground.Image = null;
-            if (!string.IsNullOrEmpty(block.BackgroundImage) && !string.IsNullOrEmpty(_tempDir))
-            {
-                string imgPath = Path.Combine(_tempDir, block.BackgroundImage.Replace('/', Path.DirectorySeparatorChar));
-                if (File.Exists(imgPath))
-                    try { picBackground.Image = Image.FromFile(imgPath); } catch { }
-            }
-            picBackground.Visible = picBackground.Image != null;
-
-            rtbNarrative.Text = block.Text;
-
-            RefreshHUD();
-
-            RefreshDecisions();
-
-            if (block.IsFinal)
-            {
-                flowDecisions.Controls.Clear();
-                var lbl = new Label
-                {
-                    Text = "─── THE END ───",
-                    Font = new Font("Segoe UI", 14f, FontStyle.Bold | FontStyle.Italic),
-                    ForeColor = Color.FromArgb(180, 120, 255),
-                    AutoSize = true,
-                    Padding = new Padding(10)
-                };
-                flowDecisions.Controls.Add(lbl);
-            }
-        }
-
-        private void RefreshHUD()
-        {
-            var state = _engine.State;
-            var props = state.GetVisibleHudProps();
-
-            bool foundHealth = false, foundStamina = false, foundLevel = false;
-            panelExtraHud.Controls.Clear();
-            int extraY = 2;
-
-            foreach (var prop in props)
-            {
-                double val = state.Properties.TryGetValue(prop.Key, out double v) ? v : prop.Initial;
-                double pct = prop.Max > prop.Min ? (val - prop.Min) / (prop.Max - prop.Min) * 100 : 0;
-                int ipct = Math.Max(0, Math.Min(100, (int)Math.Round(pct)));
-
-                string ht = prop.HudType?.ToLower() ?? "";
-                bool isHealth = ht == "health";
-                bool isStamina = ht == "stamina";
-                bool isLevel = ht == "level";
-
-                if (isHealth && !foundHealth)
-                {
-                    lblHealth.Text = $" {prop.HudLabel}  {(int)val} / {(int)prop.Max}";
-                    pbHealth.Value = ipct;
-                    foundHealth = true;
-                }
-                else if (isStamina && !foundStamina)
-                {
-                    lblStamina.Text = $" {prop.HudLabel}  {(int)val} / {(int)prop.Max}";
-                    pbStamina.Value = ipct;
-                    foundStamina = true;
-                }
-                else if (isLevel && !foundLevel)
-                {
-                    lblLevel.Text = $" {prop.HudLabel}  {(int)val} / {(int)prop.Max}";
-                    pbLevel.Value = ipct;
-                    foundLevel = true;
-                }
-                else
-                {
-                    var lbl = new Label
-                    {
-                        Text = $"{prop.HudLabel}: {(int)val}",
-                        ForeColor = Color.FromArgb(220, 210, 240),
-                        AutoSize = true,
-                        Font = new Font("Segoe UI", 8.5f),
-                        Location = new Point(4, extraY)
-                    };
-                    panelExtraHud.Controls.Add(lbl);
-                    extraY += 20;
-                }
-            }
-        }
-
-        private void RefreshDecisions()
-        {
-            flowDecisions.Controls.Clear();
-            if (_engine.CurrentBlock == null || _engine.IsCurrentBlockFinal()) return;
-
-            var decisions = _engine.GetAvailableDecisions();
-            int btnWidth = Math.Max(320, flowDecisions.Width - 20);
-
-            foreach (var dec in decisions)
-            {
-                var btn = new Button
-                {
-                    Text = "  " + dec.Text,
-                    Width = btnWidth,
-                    Height = 50,
-                    BackColor = Color.FromArgb(45, 35, 60),
-                    ForeColor = Color.FromArgb(230, 220, 245),
-                    FlatStyle = FlatStyle.Flat,
-                    Font = new Font("Segoe UI", 11f),
-                    Cursor = Cursors.Hand,
-                    TextAlign = ContentAlignment.MiddleLeft,
-                    Margin = new Padding(2, 4, 2, 4),
-                    Tag = dec
-                };
-                btn.FlatAppearance.BorderColor = Color.FromArgb(180, 120, 255);
-                btn.FlatAppearance.BorderSize = 1;
-                btn.FlatAppearance.MouseOverBackColor = Color.FromArgb(70, 55, 95);
-
-                if (!string.IsNullOrEmpty(dec.Icon) && !string.IsNullOrEmpty(_tempDir))
-                {
-                    string iconPath = Path.Combine(_tempDir, dec.Icon.Replace('/', Path.DirectorySeparatorChar));
-                    if (File.Exists(iconPath))
-                        try
-                        {
-                            btn.Image = new Bitmap(iconPath).GetThumbnailImage(28, 28, null, IntPtr.Zero);
-                            btn.ImageAlign = ContentAlignment.MiddleLeft;
-                            btn.TextImageRelation = TextImageRelation.ImageBeforeText;
-                        }
-                        catch { }
-                }
-
-                btn.Click += (s, ev) =>
-                {
-                    if (s is Button b && b.Tag is DecisionDefinition d)
-                    {
-                        string? redirect = _engine.MakeDecision(d);
-                        _engine.NavigateTo(redirect ?? d.TargetBlock);
-                        RefreshDisplay();
-                    }
-                };
-                flowDecisions.Controls.Add(btn);
-            }
-
-            if (decisions.Count == 0)
-                flowDecisions.Controls.Add(new Label
-                {
-                    Text = "(No available choices)",
-                    ForeColor = Color.FromArgb(150, 130, 170),
-                    AutoSize = true,
-                    Font = new Font("Segoe UI", 10f, FontStyle.Italic),
-                    Padding = new Padding(8)
-                });
-        }
-
-        private void PlayerForm_Resize(object sender, EventArgs e)
-        {
-            RefreshDecisions();
-        }
-
-        private void createStoryToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            EditorForm editorForm = new EditorForm();
-            editorForm.Show();
-
-        }
-
-        private void panelExtraHud_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void pbStamina_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void picBackground_Click(object sender, EventArgs e)
-        {
-
+            canvas.SetScene(
+                block,
+                decisions,
+                _engine.State.Properties,
+                _engine.State.GetVisibleHudProps());
         }
     }
 }

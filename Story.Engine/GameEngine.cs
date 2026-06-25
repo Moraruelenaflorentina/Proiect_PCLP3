@@ -30,7 +30,6 @@ namespace Story.Engine
                 .ToList();
         }
 
-        //Returns redirect block id if triggered
         public string? MakeDecision(DecisionDefinition decision)
         {
             string? redirect = null;

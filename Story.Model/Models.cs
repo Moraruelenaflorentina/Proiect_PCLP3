@@ -32,6 +32,11 @@ namespace Story.Model
         [JsonPropertyName("isFinal")] public bool IsFinal { get; set; } = false;
         [JsonPropertyName("backgroundImage")] public string? BackgroundImage { get; set; }
         [JsonPropertyName("decisions")] public List<DecisionDefinition> Decisions { get; set; } = new();
+
+        [JsonPropertyName("act")] public string? Act { get; set; }
+        [JsonPropertyName("title")] public string? Title { get; set; }
+        [JsonPropertyName("finalLine")] public string? FinalLine { get; set; }
+        [JsonPropertyName("grade")] public string? Grade { get; set; }
     }
 
     public class DecisionDefinition
@@ -41,6 +46,8 @@ namespace Story.Model
         [JsonPropertyName("icon")] public string? Icon { get; set; }
         [JsonPropertyName("condition")] public ConditionDefinition? Condition { get; set; }
         [JsonPropertyName("effects")] public List<EffectDefinition> Effects { get; set; } = new();
+
+        [JsonPropertyName("note")] public string? Note { get; set; }
     }
 
     public class EffectDefinition

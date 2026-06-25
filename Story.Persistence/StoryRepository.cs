@@ -46,7 +46,6 @@ namespace Story.Persistence
             Directory.CreateDirectory(workDir);
             Directory.CreateDirectory(Path.Combine(workDir, "images"));
 
-            //copy images from sourceDir
             string imgSrc = Path.Combine(sourceDir, "images");
             if (Directory.Exists(imgSrc))
             {
